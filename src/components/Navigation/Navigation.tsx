@@ -9,7 +9,7 @@ const ProtectedRoute = ({ children, authenticated }: ProtectedRouteProps) => {
 };
 
 export const Navigation = (): JSX.Element => {
-  const authenticated = false;
+  const authenticated = true;
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
