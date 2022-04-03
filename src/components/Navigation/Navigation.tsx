@@ -32,7 +32,7 @@ export const Navigation = (): JSX.Element => {
       <Route
         path="*"
         element={
-          authenticated ? <Navigate to={"login"} /> : <Navigate to={"/"} />
+          authenticated ? <Navigate to={"/"} /> : <Navigate to={"login"} />
         }
       />
     </Routes>
