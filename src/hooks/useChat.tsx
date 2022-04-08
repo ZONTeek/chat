@@ -6,16 +6,15 @@ export const useChat = (roomId: number) => {
   const [users, setUsers] = useState([]);
   const [messages, setMessages] = useState([]);
 
-  const username = "Bob";
-  const userId = 2;
-
   const socketRef = useRef<any>(null);
 
   useEffect(() => {
-    socketRef.current = io("http://f0655448.xsph.ru:5000", {
+    socketRef.current = io("http://localhost:5000", {
       query: { roomId },
+      withCredentials: true,
     });
-    socketRef.current.emit("user:add", { username, userId });
+
+    socketRef.current.emit("user:start");
 
     socketRef.current.on("users", (users: any) => {
       setUsers(users);
@@ -26,30 +25,25 @@ export const useChat = (roomId: number) => {
       setMessages(messages);
     });
 
-    console.log(users);
-    console.log(messages);
-    console.log(roomId);
     return () => {
-      // при размонтировании компонента выполняем отключение сокета
       socketRef.current.disconnect();
     };
+
     //eslint-disable-next-line
   }, [roomId]);
 
-  const sendMessage = ({ messageText, senderName }: any) => {
-    socketRef.current.emit("message:add", {
-      userId,
+  const sendMessage = ({ messageText }: any) => {
+    socketRef.current.emit("messages:add", {
       messageText,
-      senderName,
     });
   };
 
   const removeMessage = (id: any) => {
-    socketRef.current.emit("message:remove", id);
+    socketRef.current.emit("messages:remove", id);
   };
 
   useBeforeUnload(() => {
-    socketRef.current.emit("user:leave", userId);
+    socketRef.current.emit("user:leave", roomId);
   });
 
   // хук возвращает пользователей, сообщения и функции для отправки удаления сообщений
