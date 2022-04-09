@@ -12,6 +12,7 @@ export const RoomList = ({ logout, users }: any): JSX.Element => {
       {users.map((user: User) => (
         <div onClick={() => goToRoom(user.id)}>{user.username}</div>
       ))}
+
       <button onClick={() => logout()}>logout</button>
     </div>
   );

@@ -10,7 +10,7 @@ export const useChat = (roomId: string) => {
   const socketRef = useRef<any>(null);
 
   useEffect(() => {
-    socketRef.current = io("http://localhost:5000", {
+    socketRef.current = io(process.env.REACT_APP_URL as string, {
       query: { roomId },
       withCredentials: true,
     });
