@@ -1,23 +1,19 @@
 import { useFormik } from "formik";
 import styles from "./login.module.scss";
-import { useLocalStorage } from "hooks/useLocalStorage";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import eye from "../../assets/eye.png";
 import eye_disabled from "../../assets/eye_disabled.png";
+import { LoginProps } from "types/types";
 
-export const Login = (): JSX.Element => {
-  const [username, setUsername] = useLocalStorage("username", "Guest");
-  const navigate = useNavigate();
-  const [showPass, setShowPass] = useState(false);
+export const Login = ({ login, error }: LoginComponentProps): JSX.Element => {
+  const [showPassword, setShowPassword] = useState(false);
   const formik = useFormik({
     initialValues: {
-      username,
+      username: "",
       password: "",
     },
     onSubmit: (values) => {
-      setUsername(values.username);
-      navigate("/");
+      login(values);
     },
   });
   return (
@@ -45,13 +41,13 @@ export const Login = (): JSX.Element => {
               value={formik.values.password}
               onChange={formik.handleChange}
               placeholder="Password"
-              type={showPass ? "text" : "password"}
+              type={showPassword ? "text" : "password"}
             />
             <img
-              onMouseDown={() => setShowPass(true)}
-              onMouseUp={() => setShowPass(false)}
+              onMouseDown={() => setShowPassword(true)}
+              onMouseUp={() => setShowPassword(false)}
               className={styles.form__group__toggle}
-              src={showPass ? eye : eye_disabled}
+              src={showPassword ? eye : eye_disabled}
               alt=""
             />
           </label>
@@ -59,7 +55,13 @@ export const Login = (): JSX.Element => {
         <button className={styles.form__submit} type="submit">
           Submit
         </button>
+        {error && <label style={{ color: "white" }}>{error}</label>}
       </form>
     </div>
   );
+};
+
+type LoginComponentProps = {
+  error: string;
+  login: ({ username, password }: LoginProps) => void;
 };

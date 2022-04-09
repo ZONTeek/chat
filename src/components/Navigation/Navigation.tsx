@@ -1,6 +1,7 @@
 import { ChatRoom } from "components/ChatRoom/ChatRoom";
 import { Login } from "components/Login/Login";
 import { RoomList } from "components/RoomList/RoomList";
+import { useAuth } from "hooks/useAuth";
 import { Navigate, Route, Routes } from "react-router-dom";
 
 const ProtectedRoute = ({ children, authenticated }: ProtectedRouteProps) => {
@@ -9,10 +10,11 @@ const ProtectedRoute = ({ children, authenticated }: ProtectedRouteProps) => {
 };
 
 export const Navigation = (): JSX.Element => {
-  const authenticated = true;
+  const { authenticated, error, login, logout } = useAuth();
+
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
+      <Route path="/login" element={<Login login={login} error={error} />} />
       <Route
         path="/:roomId"
         element={
@@ -25,7 +27,7 @@ export const Navigation = (): JSX.Element => {
         path="/"
         element={
           <ProtectedRoute authenticated={authenticated}>
-            <RoomList />
+            <RoomList logout={logout} />
           </ProtectedRoute>
         }
       />
