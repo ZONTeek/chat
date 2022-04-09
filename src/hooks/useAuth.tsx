@@ -1,4 +1,4 @@
-import { API_checkAuth, API_login, API_logout } from "api/axios";
+import { API_checkAuth, API_login, API_logout, API_register } from "api/axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginProps, User } from "types/types";
@@ -6,6 +6,7 @@ import { LoginProps, User } from "types/types";
 export const useAuth = () => {
   const [authenticated, setAuthenticated] = useState(false);
   const [user, setUser] = useState<User>();
+  const [users, setUsers] = useState<User[]>();
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -14,8 +15,9 @@ export const useAuth = () => {
       const response = await API_checkAuth();
 
       if (response) {
-        setUser(response as User);
+        setUser(response.user as User);
         setAuthenticated(true);
+        setUsers(response.users);
         navigate("/");
       }
     };
@@ -24,6 +26,7 @@ export const useAuth = () => {
   }, []);
 
   const login = async ({ username, password }: LoginProps) => {
+    clearError();
     const response = await API_login({ username, password });
     if (typeof response === "string") {
       setError(response);
@@ -35,6 +38,7 @@ export const useAuth = () => {
   };
 
   const logout = async () => {
+    clearError();
     const responseStatus = await API_logout();
     if (responseStatus === 200) {
       setAuthenticated(false);
@@ -42,5 +46,28 @@ export const useAuth = () => {
     }
   };
 
-  return { authenticated, user, error, login, logout };
+  const register = async ({ username, password }: LoginProps) => {
+    clearError();
+    const response = await API_register({ username, password });
+    if (response === "Success") {
+      navigate("/login");
+    } else {
+      setError(response);
+    }
+  };
+
+  const clearError = () => {
+    setError("");
+  };
+
+  return {
+    authenticated,
+    users,
+    user,
+    error,
+    login,
+    logout,
+    register,
+    clearError,
+  };
 };

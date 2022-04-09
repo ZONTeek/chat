@@ -1,22 +1,25 @@
 import { useFormik } from "formik";
-import styles from "./login.module.scss";
 import { useState } from "react";
+import { LoginProps } from "types/types";
 import eye from "../../assets/eye.png";
 import eye_disabled from "../../assets/eye_disabled.png";
-import { LoginProps } from "types/types";
+import styles from "./login.module.scss";
 
-export const Login = ({ error, login }: LoginComponentProps): JSX.Element => {
+export const Register = ({
+  register,
+  error,
+}: RegisterPropsType): JSX.Element => {
   const [showPassword, setShowPassword] = useState(false);
-
   const formik = useFormik({
     initialValues: {
       username: "",
       password: "",
     },
     onSubmit: (values) => {
-      login(values);
+      register(values);
     },
   });
+
   return (
     <div className={styles.wrapper}>
       <form
@@ -24,7 +27,7 @@ export const Login = ({ error, login }: LoginComponentProps): JSX.Element => {
         onSubmit={formik.handleSubmit}
         autoComplete="off"
       >
-        <div className={styles.wrapper__title}>Login</div>
+        <div className={styles.wrapper__title}>Register</div>
         <div className={styles.form__group}>
           <label className={styles.form__group__label}>
             User name
@@ -66,7 +69,7 @@ export const Login = ({ error, login }: LoginComponentProps): JSX.Element => {
   );
 };
 
-type LoginComponentProps = {
+type RegisterPropsType = {
+  register: ({ username, password }: LoginProps) => void;
   error: string;
-  login: ({ username, password }: LoginProps) => void;
 };

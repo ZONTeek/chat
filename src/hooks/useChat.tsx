@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
+import { Message, User } from "types/types";
 import { useBeforeUnload } from "./useBeforeUnload";
 
-export const useChat = (roomId: number) => {
-  const [users, setUsers] = useState([]);
-  const [messages, setMessages] = useState([]);
+export const useChat = (roomId: string) => {
+  const [users, setUsers] = useState<User>();
+  const [messages, setMessages] = useState<Message[]>();
 
   const socketRef = useRef<any>(null);
 
@@ -32,7 +33,7 @@ export const useChat = (roomId: number) => {
     //eslint-disable-next-line
   }, [roomId]);
 
-  const sendMessage = ({ messageText }: any) => {
+  const sendMessage = (messageText: string) => {
     socketRef.current.emit("messages:add", {
       messageText,
     });

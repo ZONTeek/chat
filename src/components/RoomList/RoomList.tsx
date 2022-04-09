@@ -1,16 +1,17 @@
-import { useChat } from "hooks/useChat";
-import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { User } from "types/types";
 
-export const RoomList = ({ logout }: any): JSX.Element => {
-  const { messages } = useChat(1);
-  useEffect(() => {
-    console.log(messages);
-  }, [messages]);
-  useEffect(() => {
-    //sendMessage({ messageText: "Privet", senderName: "Alice" });
-  }, []);
+export const RoomList = ({ logout, users }: any): JSX.Element => {
+  const navigate = useNavigate();
+  const goToRoom = (id: number) => {
+    navigate(id);
+  };
+
   return (
     <div>
+      {users.map((user: User) => (
+        <div onClick={() => goToRoom(user.id)}>{user.username}</div>
+      ))}
       <button onClick={() => logout()}>logout</button>
     </div>
   );

@@ -22,22 +22,23 @@ export const API_login = async ({
 export const API_register = async ({
   username,
   password,
-}: any): Promise<User | undefined> => {
+}: any): Promise<string> => {
   try {
     const response = await axiosClient.post("/register", {
       username,
       password,
     });
-
-    return response.data;
+    return response.data.message;
   } catch (err) {
     console.log(err);
+    return "Register failed";
   }
 };
 
-export const API_checkAuth = async (): Promise<User | boolean> => {
+export const API_checkAuth = async (): Promise<any | boolean> => {
   try {
     const response = await axiosClient.get("/me");
+    console.log(response);
 
     return response.data;
   } catch (err) {
