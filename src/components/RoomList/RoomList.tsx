@@ -3,7 +3,7 @@ import { User } from "types/types";
 
 export const RoomList = ({ logout, users }: any): JSX.Element => {
   const navigate = useNavigate();
-  const goToRoom = (id: number) => {
+  const goToRoom = (id: string) => {
     navigate(id);
   };
 

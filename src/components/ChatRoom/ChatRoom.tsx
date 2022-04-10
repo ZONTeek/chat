@@ -1,13 +1,17 @@
 import { useFormik } from "formik";
-import { useChat } from "hooks/useChat";
 import { useLocation } from "react-router-dom";
-import styles from "./chatRoom.module.scss";
 import moment from "moment";
+import { useChat } from "hooks/useChat";
 
-export const ChatRoom = (): JSX.Element => {
+import { User } from "types/types";
+import styles from "./chatRoom.module.scss";
+
+export const ChatRoom = ({ user }: ChatRoomProps): JSX.Element => {
   const location = useLocation();
+  const userId = user?.id;
   const roomId = location.pathname.split("/")[1];
   const { messages, sendMessage } = useChat(roomId);
+
   const formik = useFormik({
     initialValues: {
       newMessage: "",
@@ -17,7 +21,6 @@ export const ChatRoom = (): JSX.Element => {
         sendMessage(values.newMessage);
         formik.values.newMessage = "";
       }
-      console.log(messages);
     },
   });
 
@@ -29,7 +32,10 @@ export const ChatRoom = (): JSX.Element => {
           {messages &&
             messages.length > 0 &&
             messages.map((message, index) => {
-              //const currentUser = false;
+              // const currentUser =
+              //   message.senderId === userId
+              //     ? styles.room__chat__message__sender__current
+              //     : styles.room__chat__message__sender;
               return (
                 <div
                   className={styles.room__chat__message}
@@ -38,13 +44,21 @@ export const ChatRoom = (): JSX.Element => {
                   {index === 0 ||
                   (index > 0 &&
                     message.senderId !== messages[index - 1].senderId) ? (
-                    <div className={styles.room__chat__message__sender}>
+                    <div
+                      className={
+                        message.senderId === userId
+                          ? styles.room__chat__message__sender__current
+                          : styles.room__chat__message__sender
+                      }
+                    >
                       {/* <img
                       className={styles.room__chat__message__sender__ava}
                       src={user}
                       alt=""
                     /> */}
-                      <div>{message.senderName}</div>
+                      <div className={styles.room__chat__message__sender__name}>
+                        {message.senderName}
+                      </div>
                       <div className={styles.room__chat__message__sender__time}>
                         {moment(message.createdAt).format("L")}
                       </div>
@@ -54,23 +68,23 @@ export const ChatRoom = (): JSX.Element => {
                   )}
                   <div className={styles.room__chat__message__text}>
                     {message.messageText}
-                    <span className={styles.room__chat__message__sender__time}>
-                      {moment(message.createdAt).format("LTS")}
-                    </span>
                   </div>
                 </div>
               );
             })}
         </div>
         <div className={styles.room__form__wrapper}>
-          <form className={styles.room__form} onSubmit={formik.handleSubmit}>
+          <form
+            className={styles.room__form}
+            onSubmit={formik.handleSubmit}
+            autoComplete="off"
+          >
             <input
               className={styles.room__form__input}
               name="newMessage"
               onChange={formik.handleChange}
               value={formik.values.newMessage}
               placeholder="Message"
-              type="text"
             />
             <button className={styles.room__form__submit} type="submit">
               Send
@@ -80,4 +94,7 @@ export const ChatRoom = (): JSX.Element => {
       </div>
     </div>
   );
+};
+type ChatRoomProps = {
+  user: User | undefined;
 };
