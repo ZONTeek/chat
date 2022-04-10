@@ -11,6 +11,7 @@ export const ChatRoom = ({ user }: ChatRoomProps): JSX.Element => {
   const userId = user?.id;
   const roomId = location.pathname.split("/")[1];
   const { messages, sendMessage } = useChat(roomId);
+  console.log(styles["wrapper"]);
 
   const formik = useFormik({
     initialValues: {
@@ -32,13 +33,14 @@ export const ChatRoom = ({ user }: ChatRoomProps): JSX.Element => {
           {messages &&
             messages.length > 0 &&
             messages.map((message, index) => {
-              // const currentUser =
-              //   message.senderId === userId
-              //     ? styles.room__chat__message__sender__current
-              //     : styles.room__chat__message__sender;
+              const current = message.senderId === userId;
               return (
                 <div
-                  className={styles.room__chat__message}
+                  className={
+                    current
+                      ? styles.room__chat__message__current
+                      : styles.room__chat__message
+                  }
                   key={message.messageId}
                 >
                   {index === 0 ||
@@ -46,17 +48,20 @@ export const ChatRoom = ({ user }: ChatRoomProps): JSX.Element => {
                     message.senderId !== messages[index - 1].senderId) ? (
                     <div
                       className={
-                        message.senderId === userId
+                        current
                           ? styles.room__chat__message__sender__current
                           : styles.room__chat__message__sender
                       }
                     >
-                      {/* <img
-                      className={styles.room__chat__message__sender__ava}
-                      src={user}
-                      alt=""
-                    /> */}
-                      <div className={styles.room__chat__message__sender__name}>
+                      <div
+                        className={
+                          styles[
+                            current
+                              ? "room__chat__message__sender__name__current"
+                              : "room__chat__message__sender__name"
+                          ]
+                        }
+                      >
                         {message.senderName}
                       </div>
                       <div className={styles.room__chat__message__sender__time}>

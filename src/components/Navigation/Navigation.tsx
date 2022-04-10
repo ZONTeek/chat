@@ -15,35 +15,38 @@ export const Navigation = (): JSX.Element => {
     useAuth();
 
   return (
-    <Routes>
-      <Route path="/login" element={<Login login={login} error={error} />} />
-      <Route
-        path="/register"
-        element={<Register register={register} error={error} />}
-      />
-      <Route
-        path="/:roomId"
-        element={
-          <ProtectedRoute authenticated={authenticated}>
-            <ChatRoom user={user} />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/"
-        element={
-          <ProtectedRoute authenticated={authenticated}>
-            <RoomList users={users} logout={logout} />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="*"
-        element={
-          authenticated ? <Navigate to={"/"} /> : <Navigate to={"login"} />
-        }
-      />
-    </Routes>
+    <>
+      <div>{user?.username}</div>
+      <Routes>
+        <Route path="/login" element={<Login login={login} error={error} />} />
+        <Route
+          path="/register"
+          element={<Register register={register} error={error} />}
+        />
+        <Route
+          path="/:roomId"
+          element={
+            <ProtectedRoute authenticated={authenticated}>
+              <ChatRoom user={user} />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute authenticated={authenticated}>
+              <RoomList users={users} logout={logout} />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="*"
+          element={
+            authenticated ? <Navigate to={"/"} /> : <Navigate to={"login"} />
+          }
+        />
+      </Routes>
+    </>
   );
 };
 
