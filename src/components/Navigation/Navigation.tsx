@@ -11,7 +11,8 @@ const ProtectedRoute = ({ children, authenticated }: ProtectedRouteProps) => {
 };
 
 export const Navigation = (): JSX.Element => {
-  const { users, authenticated, error, login, register, logout } = useAuth();
+  const { user, users, authenticated, error, login, register, logout } =
+    useAuth();
 
   return (
     <Routes>
@@ -24,7 +25,7 @@ export const Navigation = (): JSX.Element => {
         path="/:roomId"
         element={
           <ProtectedRoute authenticated={authenticated}>
-            <ChatRoom />
+            <ChatRoom user={user} />
           </ProtectedRoute>
         }
       />
