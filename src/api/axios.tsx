@@ -1,5 +1,5 @@
 import axios from "axios";
-import { User } from "../types/types";
+import { LoginResponse, ResponseError } from "../types/types";
 
 const axiosClient = axios.create({
   baseURL: process.env.REACT_APP_URL,
@@ -9,13 +9,13 @@ const axiosClient = axios.create({
 export const API_login = async ({
   username,
   password,
-}: any): Promise<User | string> => {
+}: any): Promise<LoginResponse | ResponseError> => {
   try {
     const response = await axiosClient.post("/login", { username, password });
 
     return response.data;
   } catch (e) {
-    return "Incorrect login or password";
+    return { error: "Incorrect login or password" };
   }
 };
 
@@ -35,7 +35,9 @@ export const API_register = async ({
   }
 };
 
-export const API_checkAuth = async (): Promise<any | boolean> => {
+export const API_checkAuth = async (): Promise<
+  LoginResponse | ResponseError
+> => {
   try {
     const response = await axiosClient.get("/me");
     console.log(response);
@@ -43,7 +45,7 @@ export const API_checkAuth = async (): Promise<any | boolean> => {
     return response.data;
   } catch (err) {
     console.log("Unauthorized");
-    return false;
+    return { error: "Auth failed" };
   }
 };
 

@@ -1,8 +1,8 @@
 import { useFormik } from "formik";
 import styles from "./login.module.scss";
 import { useState } from "react";
-import eye from "../../assets/eye.png";
-import eye_disabled from "../../assets/eye_disabled.png";
+import eye from "../../assets/icons/eye.png";
+import eye_disabled from "../../assets/icons/eye_disabled.png";
 import { LoginProps } from "types/types";
 
 export const Login = ({ error, login }: LoginComponentProps): JSX.Element => {

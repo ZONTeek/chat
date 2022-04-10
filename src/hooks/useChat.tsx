@@ -2,10 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import { Message, User } from "types/types";
 import { useBeforeUnload } from "./useBeforeUnload";
+import icq from "../assets/SFX/icq.wav";
 
 export const useChat = (roomId: string) => {
   const [users, setUsers] = useState<User>();
   const [messages, setMessages] = useState<Message[]>();
+  const sound = new Audio(icq);
+  sound.volume = 0.2;
 
   const socketRef = useRef<any>(null);
 
@@ -24,6 +27,12 @@ export const useChat = (roomId: string) => {
 
     socketRef.current.on("messages", (messages: any) => {
       setMessages(messages);
+    });
+
+    socketRef.current.on("notify", () => {
+      console.log("notified");
+
+      sound.play();
     });
 
     return () => {

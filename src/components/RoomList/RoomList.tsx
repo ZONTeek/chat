@@ -9,9 +9,10 @@ export const RoomList = ({ logout, users }: any): JSX.Element => {
 
   return (
     <div>
-      {users.map((user: User) => (
-        <div onClick={() => goToRoom(user.id)}>{user.username}</div>
-      ))}
+      {users &&
+        users.map((user: User) => (
+          <div onClick={() => goToRoom(user.id)}>{user?.username}</div>
+        ))}
 
       <button onClick={() => logout()}>logout</button>
     </div>
